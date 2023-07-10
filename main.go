@@ -5,7 +5,9 @@ import (
 	"github.com/liyafly/Luneth/global"
 	"github.com/liyafly/Luneth/internal/model"
 	"github.com/liyafly/Luneth/internal/routers"
+	"github.com/liyafly/Luneth/pkg/logger"
 	"github.com/liyafly/Luneth/pkg/setting"
+	"gopkg.in/natefinch/lumberjack.v2"
 	"log"
 	"net/http"
 	"time"
@@ -19,6 +21,10 @@ func init() {
 	err = setupDBEngine()
 	if err != nil {
 		log.Fatalf("init.setupDBEngine err: %v", err)
+	}
+	err = setupLogger()
+	if err != nil {
+		log.Fatalf("init.setupLogger err: %v", err)
 	}
 }
 
@@ -53,6 +59,17 @@ func setupDBEngine() error {
 	return nil
 }
 
+func setupLogger() error {
+	global.Logger = logger.NewLogger(&lumberjack.Logger{
+		Filename:  global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
+		MaxSize:   600,
+		MaxAge:    10,
+		LocalTime: true,
+	}, "", log.LstdFlags).WithCaller(2)
+
+	return nil
+}
+
 func main() {
 
 	gin.SetMode(global.ServerSetting.RunMode)
@@ -64,6 +81,7 @@ func main() {
 		WriteTimeout:   global.ServerSetting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
+	global.Logger.Infof("%s: go-programming-tour-book/%s", "liyafly", "blog-service")
 	err := s.ListenAndServe()
 	if err != nil {
 		return
