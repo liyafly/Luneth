@@ -1,0 +1,2 @@
+2023/07/10 17:00:59 {"callers":["/Users/liyafly/Developer/Luneth/main.go: 25 main.init.0"],"level":"info","message":"liyafly: go-programming-tour-book/blog-service","time":1688979659612631000}
+2023/07/10 17:01:11 {"callers":["/Users/liyafly/Developer/Luneth/main.go: 25 main.init.0"],"level":"info","message":"liyafly: go-programming-tour-book/blog-service","time":1688979671160935000}
